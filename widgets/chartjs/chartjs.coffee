@@ -29,20 +29,7 @@ class Dashing.Chartjs extends Dashing.Widget
 
   constructor: ->
     super
-    @id = @get("id")
-    @type = @get("type")
-    @header = @get("header")
-    @labels = @get("labels") && @get("labels").split(",")
-    @options = @get("options") || {}
 
-    if @type == "scatter"
-      @datasets = @get("datasets")
-    else
-      @datasets = @get("datasets") && @get("datasets").split(",")
-
-    @colorNames = @get("colornames") && @get("colornames").split(",")
-
-  ready: ->
     Chart.defaults.global.defaultColor = 'rgb(255, 255, 255)'
     Chart.defaults.global.defaultFontColor = 'rgb(255, 255, 255)'
     Chart.defaults.global.legend.labels.fontColor = 'rgb(255, 255, 255)'
@@ -66,6 +53,21 @@ class Dashing.Chartjs extends Dashing.Widget
     # Override original legend label generator
     # https://github.com/chartjs/Chart.js/blob/master/src/controllers/controller.doughnut.js#L45
     # Chart.defaults.global.legend.labels.generateLabels = generateLabels
+
+    @id = @get("id")
+    @type = @get("type")
+    @header = @get("header")
+    @labels = @get("labels") && @get("labels").split(",")
+    @options = @get("options") || {}
+
+    if @type == "scatter"
+      @datasets = @get("datasets")
+    else
+      @datasets = @get("datasets") && @get("datasets").split(",")
+
+    @colorNames = @get("colornames") && @get("colornames").split(",")
+
+  ready: ->
 
     @draw()
 
