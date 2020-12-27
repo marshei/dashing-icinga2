@@ -5,3 +5,4 @@ log
 tmp
 *.lock
 config/icinga2.local.json
+/.idea/

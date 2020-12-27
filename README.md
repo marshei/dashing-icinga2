@@ -61,7 +61,7 @@ Supported browsers and clients:
 
 * Linux, Unix, \*Pi
 * Chrome, Firefox, Safari
-* "new" Edge [v79 and above]
+* "new" Edge (v79 and above)
 
 **Windows with IE and old Edge (without Chromium) is not supported since SSE (Server Sent Events) are not implemented.**
 
