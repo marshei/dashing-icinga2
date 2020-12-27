@@ -1,0 +1,199 @@
+<script type='text/javascript'>
+$(function() {
+  // These settings override the defaults set in application.coffee. You can do this on a per dashboard basis.
+  Dashing.widget_margins = [5,5]
+  //Dashing.widget_base_dimensions = [300,300]
+  //Experimental: widget size based on window size.
+  Dashing.widget_base_dimensions = [$( window ).width()/5, $( window ).height()/2.5];
+  Dashing.numColumns = 4
+});
+</script>
+<!--
+<style type="text/css">
+body {
+  font-size: 12px;
+}
+
+h1 {
+   font-size: 24px;
+   margin-bottom: 5px;
+   margin-top: 5px;
+}
+
+h2 {
+   font-size: 20px;
+}
+
+h3 {
+   margin-bottom: 2px;
+   margin-top: 2px;
+   font-size: 18px;
+}
+
+li {
+   font-size: 10px;
+}
+
+.updated-at {
+  font-size: 10px;
+  bottom: 2px;
+}
+
+.more-info {
+  font-size: 10px;
+  bottom: 15px;
+}
+.widget {
+  vertical-align: top;
+  padding: 2px 3px;
+}
+
+.widget-number .change-rate {
+     font-size: 16px;
+}
+.widget-number h2 {
+     font-size: 50px;
+}
+.widget-news h1 {
+     font-size: 24px;
+}
+.widget-news h2 {
+     font-size: 20px;
+}
+.widget-time-since_last p {
+     font-size: 16px;
+}
+.widget-list li {
+  margin: 0 3px;
+}
+.widget-list ol {
+  margin: 0 3px;
+}
+.widget-list ul {
+  margin: 0 3px;
+}
+.widget-list .value {
+  margin-left: 4px;
+}
+.widget-comments .title  {
+  margin-bottom: 5px;
+}
+.widget-graph .x_tick .title {
+    font-size: 10px;
+    font-weight: 600;
+}
+.widget-graph .y_tick .title {
+    font-size: 8px;
+    font-weight: 600;
+}
+.widget-comments.twitter_mentions p {
+    font-size: 15px;
+}
+.icon-background {
+  opacity: 0.1;
+  font-size: 125px;
+}
+</style>
+-->
+
+<% content_for :title do %>Icinga 2 @ fritz.box<% end %>
+<div class="gridster">
+  <ul>
+    <!-- Statistics -->
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-view="Clock" data-title="<%=getTimeZone()%>" data-timezone="<%=getTimeZone()%>"></div>
+    </li>
+
+    <li data-row="1" data-col="2" data-sizex="1" data-sizey="1">
+      <div
+        data-id="doughnut-pie-hosts"
+        data-view="Chartjs"
+        data-type="doughnut"
+        data-title="Hosts"
+        data-labels="Up,Down"
+        data-colornames="green,red"
+        data-datasets="20,13"
+        data-height="300"
+        data-width="300"
+      ></div>
+    </li>
+    <li data-row="1" data-col="3" data-sizex="1" data-sizey="1">
+      <div
+        data-id="doughnut-pie-services"
+        data-view="Chartjs"
+        data-type="doughnut"
+        data-title="Services"
+        data-labels="OK,Warning,Critical,Unknown"
+        data-colornames="green,yellow,red,purple"
+        data-datasets="20,13,12,0"
+        data-height="300"
+        data-width="300"
+      ></div>
+    </li>
+
+    <li data-row="2" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="icinga-stats" data-view="List" data-unordered="true" data-title="Statistics"></div>
+    </li>
+
+    <li data-row="2" data-col="2" data-sizex="1" data-sizey="1">
+      <div
+        data-id="bar-chart-checks"
+        data-view="Chartjs"
+        data-type="horizontalBar"
+        data-header="Active Checks"
+        data-title="Active Checks"
+        data-labels="Hosts/min,Services/min"
+        data-colornames="aqua,lime"
+        data-datasets="42,404"
+        data-height="300"
+        data-width="300"
+      ></div>
+    </li>
+
+    <li data-row="2" data-col="3" data-sizex="1" data-sizey="1">
+      <div data-id="icinga-room-climate" data-view="Number" data-title="Room Climate"></div>
+    </li>
+
+    <!-- Problems -->
+    <!--
+    <li data-row="1" data-col="3" data-sizex="1" data-sizey="1">
+      <div data-id="icinga-host-meter" data-view="Meter" data-title="Host Problems" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="4" data-sizex="1" data-sizey="1">
+      <div data-id="icinga-service-meter" data-view="Meter" data-title="Service Problems" data-min="0" data-max="100"></div>
+    </li>
+    -->
+
+    <!-- Handled -->
+    <!--
+    <li data-row="2" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="handled-stats" data-view="List" data-unordered="true" data-title="Handled"></div>
+    </li>
+    -->
+    <!-- Unhandled Host and Service Problems -->
+    <!--
+    <li data-row="2" data-col="2" data-sizex="1" data-sizey="1">
+      <div data-id="icinga-host-problems" data-view="Simplelist" data-title="Unhandled Hosts"></div>
+    </li>
+    <li data-row="2" data-col="3" data-sizex="1" data-sizey="1">
+      <div data-id="icinga-service-problems" data-view="Simplelist" data-title="Unhandled Services"></div>
+    </li>
+    -->
+
+    <!-- Takes two rows for all service problems by severity -->
+    <li data-row="1" data-col="4" data-sizex="1" data-sizey="2">
+      <div class="scrollable" data-id="icinga-severity" data-view="List" data-unordered="true" data-title="Problems"></div>
+    </li>
+
+    <!-- Icinga Web 2 iFrame. getIcingaWeb2Url() is defined in config.ru and reads from config/icinga2*.json -->
+    <!--
+    <li data-row="3" data-col="1" data-sizex="2" data-sizey="2">
+      <div data-id="iframe" data-view="Iframe" data-title="Icinga Web Host Problems" data-url="<%=getIcingaWeb2Url()%>/monitoring/list/hosts?host_problem=1&sort=host_severity&showFullscreen&showCompact"></div>
+    </li>
+    <li data-row="3" data-col="3" data-sizex="2" data-sizey="2">
+      <div data-id="iframe" data-view="Iframe" data-title="Icinga Web Service Problems" data-url="<%=getIcingaWeb2Url()%>/monitoring/list/services?service_problem=1&sort=service_severity&dir=desc&showFullscreen&showCompact"></div>
+    </li>
+    -->
+  </ul>
+
+</div>

@@ -201,5 +201,11 @@ SCHEDULER.every '10s', :first_in => 0 do |job|
     items: unhandled_service_problems,
     moreinfo: "All Problems: " + (icinga.service_count_problems_critical + icinga.service_count_problems_warning + icinga.service_count_problems_unknown).to_s
   })
+
+  send_event('icinga-room-climate', {
+    current: icinga.room_climate_temperature,
+    suffix: "°C",
+    moreinfo: "Humidity: " + icinga.room_climate_humidity.to_s + "%"
+  })
 end
 

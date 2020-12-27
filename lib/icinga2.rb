@@ -64,6 +64,12 @@ class Icinga2
   attr_reader :service_count_in_downtime
   attr_reader :service_count_acknowledged
 
+  attr_reader :room_climate_temperature
+  attr_reader :room_climate_humidity
+  attr_reader :room_climate_service
+  attr_reader :room_climate_service_enabled
+  attr_reader :room_climate_result
+
   # data providers
   attr_reader :app_data
   attr_reader :cib_data
@@ -173,6 +179,14 @@ class Icinga2
           if config_dashboard.key? 'timezone'
             @time_zone = config_dashboard['timezone']
           end
+
+          @room_climate_service_enabled = false
+          if config_dashboard.key? 'room_climate_service'
+            if config_dashboard['room_climate_service'].size > 0
+              @room_climate_service = config_dashboard['room_climate_service']
+              @room_climate_service_enabled = true
+            end
+          end
         end
 
         if @config.key? 'icingaweb2'
@@ -189,6 +203,8 @@ class Icinga2
         @nodeName = nil
         @showOnlyHardStateProblems = false
         @time_zone = "UTC"
+        @room_climate_service = ""
+        @room_climate_service_enabled = false
 
         # external attribute
         @icingaweb2_url = 'http://localhost/icingaweb2'
@@ -775,6 +791,10 @@ class Icinga2
     @service_count_in_downtime = 0
     @service_count_acknowledged = 0
 
+    @room_climate_temperature = 0
+    @room_climate_humidity = 0
+    @room_climate_result = nil
+
     @app_data = nil
     @cib_data = nil
     @all_hosts_data = nil
@@ -828,7 +848,7 @@ class Icinga2
     all_hosts_data = nil
     all_services_data = nil
 
-    # betr: Falls Filterung erwünscht ist, z.B. auf eine bestimmte Hostgruppe, kann dies der Funktion getHostObjects resp. getServiceObjects übergeben werden
+    # if filtering is needed a hostgroup may be passed to getHostObjects or getServiceObjects
     if @showOnlyHardStateProblems
       all_hosts_data = getHostObjects([ "name", "display_name", "state", "acknowledgement", "downtime_depth", "last_check", "last_hard_state" ], nil, nil)
       all_services_data = getServiceObjects([ "name", "display_name", "host_name", "state", "acknowledgement", "downtime_depth", "last_check", "last_hard_state" ], nil, [ "host.name", "host.display_name", "host.state", "host.acknowledgement", "host.downtime_depth", "host.last_check" ])
@@ -853,6 +873,24 @@ class Icinga2
       # severity
       @service_problems, @service_problems_severity = getProblemServices(all_services_data, all_hosts_data)
     end
+
+    # get room climate information
+    if @room_climate_service_enabled
+        @room_climate_result = getServiceObjects(["last_check_result"],
+                                    "match(\"*" + @room_climate_service + "*\",service.name)", nil)
+
+        room_climate_result.each do |service|
+          service["attrs"]["last_check_result"]["performance_data"].each do |perf|
+            if perf.start_with?("temperature")
+              @room_climate_temperature = perf.split('=')[1].split(';')[0].to_f
+              # puts "Temperature for " + service["name"] + ": " + @room_climate_temperature.to_s + "C"
+            elsif perf.start_with?("humidity")
+              @room_climate_humidity = perf.split('=')[1].split(';')[0].delete('%').to_f
+              # puts "Humidity for " + service["name"] + ": " + @room_climate_humidity.to_s + "%"
+            end
+          end
+        end
+      end
 
   end
 end
