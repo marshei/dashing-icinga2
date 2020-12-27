@@ -205,7 +205,7 @@ SCHEDULER.every '10s', :first_in => 0 do |job|
   send_event('icinga-room-climate', {
     current: icinga.room_climate_temperature,
     suffix: "°C",
-    moreinfo: "Humidity: " + icinga.room_climate_humidity.to_s + "%"
+    moreinfo: "Humidity: " + icinga.room_climate_humidity.round.to_s + " %H"
   })
 end
 
