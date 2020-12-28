@@ -68,8 +68,8 @@ class Dashing.Chartjs extends Dashing.Widget
     @colorNames = @get("colornames") && @get("colornames").split(",")
 
   ready: ->
-
-    @draw()
+    # This is fired when the widget is done being rendered
+    # @draw()
 
   onData: (data) ->
     @type = data.type || @type
@@ -165,7 +165,7 @@ class Dashing.Chartjs extends Dashing.Widget
   borderColor: (colorName) -> "rgba(#{ @colorCode()[colorName] }, 1)"
   pointBackgroundColor: (colorName) -> "rgba(#{ @colorCode()[colorName] }, 1)"
   pointBorderColor: (colorName) -> "rgba(#{ @colorCode()[colorName] }, 1)"
-  pointHoverBackgroundColor: -> "fff"
+  pointHoverBackgroundColor: -> "#fff"
   pointHoverBorderColor: (colorName) -> "rgba(#{ @colorCode()[colorName] }, 0.8)"
 
   circleColor: (colorName) ->
