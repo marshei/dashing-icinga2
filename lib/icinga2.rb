@@ -64,11 +64,16 @@ class Icinga2
   attr_reader :service_count_in_downtime
   attr_reader :service_count_acknowledged
 
+  attr_reader :room_climate_service_enabled
+  attr_reader :room_climate_service
   attr_reader :room_climate_temperature
   attr_reader :room_climate_humidity
-  attr_reader :room_climate_service
-  attr_reader :room_climate_service_enabled
-  attr_reader :room_climate_result
+
+  attr_reader :isp_service_enabled
+  attr_reader :isp_downstream_service
+  attr_reader :isp_downstream
+  attr_reader :isp_upstream_service
+  attr_reader :isp_upstream
 
   # data providers
   attr_reader :app_data
@@ -185,6 +190,15 @@ class Icinga2
             if config_dashboard['room_climate_service'].size > 0
               @room_climate_service = config_dashboard['room_climate_service']
               @room_climate_service_enabled = true
+            end
+          end
+
+          @isp_service_enabled = false
+          if config_dashboard.key? 'isp_downstream_service' and config_dashboard.key? 'isp_upstream_service'
+            if config_dashboard['isp_downstream_service'].size > 0 and config_dashboard['isp_upstream_service'].size > 0
+              @isp_downstream_service = config_dashboard['isp_downstream_service']
+              @isp_upstream_service = config_dashboard['isp_upstream_service']
+              @isp_service_enabled = true
             end
           end
         end
@@ -755,6 +769,23 @@ class Icinga2
     @version = version_str
   end
 
+  def getServicePerfData(service_name, service_result, perf_data_name, unit_to_delete)
+    ret_value = 0.0
+    service_result.each do |service|
+      service["attrs"]["last_check_result"]["performance_data"].each do |perf|
+        if perf.start_with?(perf_data_name)
+          if unit_to_delete.size > 0
+            ret_value = perf.split('=')[1].split(';')[0].delete(unit_to_delete).to_f
+          elsif
+            ret_value = perf.split('=')[1].split(';')[0].to_f
+          end
+          # puts perf_data_name + " for " + service_name + ": " + ret_value.to_s
+        end
+      end
+    end
+    return ret_value
+  end
+
   def initializeAttributes()
     @version = "Not running"
     @node_name = ""
@@ -793,7 +824,9 @@ class Icinga2
 
     @room_climate_temperature = 0
     @room_climate_humidity = 0
-    @room_climate_result = nil
+
+    @isp_downstream = 0
+    @isp_upstream = 0
 
     @app_data = nil
     @cib_data = nil
@@ -876,21 +909,21 @@ class Icinga2
 
     # get room climate information
     if @room_climate_service_enabled
-        @room_climate_result = getServiceObjects(["last_check_result"],
-                                    "match(\"*" + @room_climate_service + "*\",service.name)", nil)
+      room_climate_result = getServiceObjects(["last_check_result"],
+                               "match(\"*" + @room_climate_service + "*\",service.name)", nil)
+      @room_climate_temperature = getServicePerfData(@room_climate_service, room_climate_result, "temperature", "")
+      @room_climate_humidity =  getServicePerfData(@room_climate_service, room_climate_result, "humidity", "%")
+    end
 
-        room_climate_result.each do |service|
-          service["attrs"]["last_check_result"]["performance_data"].each do |perf|
-            if perf.start_with?("temperature")
-              @room_climate_temperature = perf.split('=')[1].split(';')[0].to_f
-              # puts "Temperature for " + service["name"] + ": " + @room_climate_temperature.to_s + "C"
-            elsif perf.start_with?("humidity")
-              @room_climate_humidity = perf.split('=')[1].split(';')[0].delete('%').to_f
-              # puts "Humidity for " + service["name"] + ": " + @room_climate_humidity.to_s + "%"
-            end
-          end
-        end
-      end
+    # get the ISP information
+    if @isp_service_enabled
+      isp_service_result = getServiceObjects(["last_check_result"],
+                              "match(\"*" + @isp_downstream_service + "*\",service.name)", nil)
+      @isp_downstream = getServicePerfData(@isp_downstream_service, isp_service_result, "downstream_max", "")
 
+      isp_service_result = getServiceObjects(["last_check_result"],
+                              "match(\"*" + @isp_upstream_service + "*\",service.name)", nil)
+      @isp_upstream = getServicePerfData(@isp_upstream_service, isp_service_result, "upstream_max", "")
+    end
   end
 end

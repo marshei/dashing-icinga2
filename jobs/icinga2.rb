@@ -74,12 +74,13 @@ SCHEDULER.every '10s', :first_in => 0 do |job|
    moreinfo: "Avg latency: " + icinga.avg_latency.to_s + "s",
    color: 'blue' })
 
-  #### Dougnuts
+  #### Doughnuts
   send_event('doughnut-pie-hosts', {
     type: "doughnut",
     header: "Hosts",
     labels: [ "UP", "Down" ],
     datasets: [ icinga.host_count_up, icinga.host_count_problems_down],
+    moreinfo: "Total hosts: " + icinga.host_count_all.to_s,
   })
 
   send_event('doughnut-pie-services', {
@@ -87,7 +88,9 @@ SCHEDULER.every '10s', :first_in => 0 do |job|
     header: "Services",
     labels: [ "OK", "Warning", "Critical", "Unknown" ],
     datasets: [ icinga.service_count_ok, icinga.service_count_problems_warning, icinga.service_count_problems_critical, icinga.service_count_problems_unknown],
+    moreinfo: "Total services: " + icinga.service_count_all.to_s,
   })
+
   send_event('bar-chart-endpoints', {
     header: "Endpoints",
     labels: [ "Connected", "Not Connected" ],
@@ -206,6 +209,12 @@ SCHEDULER.every '10s', :first_in => 0 do |job|
     current: icinga.room_climate_temperature,
     suffix: "°C",
     moreinfo: "Humidity: " + icinga.room_climate_humidity.round.to_s + " %H"
+  })
+
+  send_event('icinga-isp', {
+    downstream: icinga.isp_downstream.round,
+    upstream: icinga.isp_upstream.round,
+    unitinfo: "In Mbit/s"
   })
 end
 

@@ -1,0 +1,35 @@
+// ----------------------------------------------------------------------------
+// Sass declarations
+// ----------------------------------------------------------------------------
+$background-color:  #47bbb3;
+$down-stream-color: #fff;
+
+$title-color:       rgb(255, 255, 255);
+$unitinfo-color:    rgb(255, 255, 255);
+
+// ----------------------------------------------------------------------------
+// Widget-datatransfer styles
+// ----------------------------------------------------------------------------
+.widget-datatransfer {
+
+  background-color: $background-color;
+
+  .title {
+    color: $title-color;
+  }
+
+  .down-stream {
+    color: $down-stream-color;
+  }
+
+  .up-stream {
+    font-weight: 500;
+    font-size: 30px;
+    color: $down-stream-color;
+  }
+
+  .unit-info {
+    color: $unitinfo-color;
+  }
+
+}
