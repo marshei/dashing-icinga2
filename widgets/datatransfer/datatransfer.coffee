@@ -2,14 +2,6 @@ class Dashing.Datatransfer extends Dashing.Widget
   @accessor 'downstream', Dashing.AnimatedValue
   @accessor 'upstream', Dashing.AnimatedValue
 
-  @accessor 'downarrow', ->
-    if @get('downstream')
-      'fa fa-arrow-down'
-
-  @accessor 'uparrow', ->
-    if @get('upstream')
-      'fa fa-arrow-up'
-
   onData: (data) ->
     if data.status
       # clear existing "status-*" classes
