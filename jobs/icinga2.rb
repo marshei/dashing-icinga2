@@ -40,6 +40,8 @@ SCHEDULER.every '15s', :first_in => 0 do |job|
 
   # icinga stats
   icinga_stats = [
+    {"label" => "Uptime", "value" => icinga.uptime},
+    {"label" => "Avg latency in ms", "value" => icinga.avg_latency},
     {"label" => "Host checks/min", "value" => icinga.host_active_checks_1min},
     {"label" => "Service checks/min", "value" => icinga.service_active_checks_1min},
   ]
@@ -75,7 +77,6 @@ SCHEDULER.every '15s', :first_in => 0 do |job|
   send_event('icinga-stats', {
    title: "Icinga " + icinga.version,
    items: icinga_stats,
-   moreinfo: "Avg latency: " + icinga.avg_latency.to_s + "s",
    color: 'blue' })
 
   #### Doughnuts

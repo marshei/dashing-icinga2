@@ -786,6 +786,23 @@ class Icinga2
     return ret_value
   end
 
+  def getUptimeString(seconds)
+    seconds_diff = seconds.to_i.abs
+
+    days = seconds_diff / 86400
+    seconds_diff -= days * 86400
+
+    hours = seconds_diff / 3600
+    seconds_diff -= hours * 3600
+
+    minutes = seconds_diff / 60
+    seconds_diff -= minutes * 60
+
+    seconds = seconds_diff
+
+    return "#{days}d #{hours}h #{minutes}m"
+ end
+
   def initializeAttributes()
     @version = "Not running"
     @node_name = ""
@@ -851,10 +868,9 @@ class Icinga2
     @cib_data = getCIBData() #exported
 
     unless(@cib_data.nil?)
-      uptimeTmp = cib_data["uptime"].round(2)
-      @uptime = Time.at(uptimeTmp).utc.strftime("%H:%M:%S")
+      @uptime = getUptimeString(cib_data["uptime"])
 
-      @avg_latency = cib_data["avg_latency"].round(2)
+      @avg_latency = (cib_data["avg_latency"] * 1000).round(2)
       @avg_execution_time = cib_data["avg_execution_time"].round(2)
 
       @host_count_up = cib_data["num_hosts_up"].to_int
