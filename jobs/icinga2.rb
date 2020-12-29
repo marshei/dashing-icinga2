@@ -47,7 +47,11 @@ SCHEDULER.every '15s', :first_in => 0 do |job|
   wqStats, clusterStats = icinga.getIcingaStats()
 
   wqStats.each do |name, value|
-    icinga_stats.push( { "label" => name, "value" => "%0.2f" % value } )
+    if value != 0
+      icinga_stats.push( { "label" => name, "value" => value.round(2).to_s } )
+    elsif
+      icinga_stats.push( { "label" => name, "value" => "0" } )
+    end
   end
   #clusterStats.each do |name, value|
   #  icinga_stats.push( { "label" => name, "value" => "%0.2f" % value } )
