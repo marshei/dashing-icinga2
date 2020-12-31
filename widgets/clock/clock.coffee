@@ -5,6 +5,7 @@ class Dashing.Clock extends Dashing.Widget
 
   startTime: =>
     zone = @get('timezone')
+    locale = @get('locale')
     optionsDate = {
       timeZone: zone,
       weekday: 'short',
@@ -19,8 +20,8 @@ class Dashing.Clock extends Dashing.Widget
       hour12: false
     };
 
-    date = new Date().toLocaleDateString('en-US', optionsDate);
-    time = new Date().toLocaleTimeString('en-US', optionsTime);
+    date = new Date().toLocaleDateString(locale, optionsDate);
+    time = new Date().toLocaleTimeString(locale, optionsTime);
 
     @set('time', time)
     @set('date', date)
