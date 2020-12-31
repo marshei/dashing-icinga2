@@ -72,14 +72,14 @@ class Dashing.Chartjs extends Dashing.Widget
     # @draw()
 
   onData: (data) ->
-    @type = data.type || @type
-    @header = data.header || @header
-    @labels = data.labels || @labels
-    @options = data.options || @options
-    @datasets = data.datasets || @datasets
-    @colorNames = data.colorNames || @colorNames
-
-    @draw()
+    if data != null
+      @type = data.type || @type
+      @header = data.header || @header
+      @labels = data.labels || @labels
+      @options = data.options || @options
+      @datasets = data.datasets || @datasets
+      @colorNames = data.colorNames || @colorNames
+      @draw()
 
   draw: ->
     switch @type
