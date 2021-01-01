@@ -671,22 +671,18 @@ class Icinga2
     # debug
     #service_problems_severity["dies 6 ist ein Test-Host der Down ist"] = 2.0
     all_hosts_data.each do |host|
-        if (host["attrs"]["state"] == 0) or
-          (host["attrs"]["downtime_depth"] > 0) or
-          (host["attrs"]["acknowledgement"] > 0)
-            next
-        end
-
-        if @showOnlyHardStateProblems and (host["attrs"]["last_hard_state"] == 0.0)
+      if (host["attrs"]["state"] == 0) or
+        (host["attrs"]["downtime_depth"] > 0) or
+        (host["attrs"]["acknowledgement"] > 0)
           next
-        end
+      end
 
-        host_display_name = host["attrs"]["display_name"]
-        host_display_name_clean = host_display_name.split('(')[0].split('|')[0]
-        host_display_name_clean_split = host_display_name_clean.split(': ')
-        host_display_name_for_display = host_display_name_clean_split[0] + ' (' + host_display_name_clean_split[1] + ')'
+      if @showOnlyHardStateProblems and (host["attrs"]["last_hard_state"] == 0.0)
+        next
+      end
 
-        service_problems_severity[host_display_name_for_display + " is DOWN"] = 2.0
+      host_display_name_for_display = getHostNameForDisplay(host["attrs"]["display_name"])
+      service_problems_severity[host_display_name_for_display + " is DOWN"] = 2.0
     end
 
     service_problems.sort_by {|k, v| v}.reverse.each do |obj, severity|
@@ -696,10 +692,7 @@ class Icinga2
 
       test2 = obj["joins"]["host"]["state"].to_s
 
-      host_display_name = obj["joins"]["host"]["display_name"]
-      host_display_name_clean = host_display_name.split('(')[0].split('|')[0]
-      host_display_name_clean_split = host_display_name_clean.split(': ')
-      host_display_name_for_display = host_display_name_clean_split[0] + ' (' + host_display_name_clean_split[1] + ')'
+      host_display_name_for_display = getHostNameForDisplay(obj["joins"]["host"]["display_name"])
       service_display_name = obj["attrs"]["display_name"]
       name = host_display_name_for_display + " - " + service_display_name
 
@@ -709,6 +702,17 @@ class Icinga2
     end
 
     return service_problems, service_problems_severity
+  end
+
+  def getHostNameForDisplay(host_display_name)
+    host_display_name_clean = host_display_name.split('(')[0].split('|')[0]
+    host_display_name_clean_split = host_display_name_clean.split(': ')
+    if host_display_name_clean_split.length() > 1
+      host_display_name_for_display = host_display_name_clean_split[0] + ' (' + host_display_name_clean_split[1] + ')'
+    else
+      host_display_name_for_display = host_display_name_clean_split[0]
+    end
+    return host_display_name_for_display
   end
 
   def getIcingaStats()
