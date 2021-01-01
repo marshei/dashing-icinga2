@@ -518,7 +518,9 @@ class Icinga2
           end
         else
           if (compStates.include?(d["state"]) && d["downtime_depth"] == 0 && d["acknowledgement"] == 0)
-            problems = problems + 1
+            if (item["joins"]["host"]["state"] == 0.0)
+              problems = problems + 1
+            end
           end
         end
       end
