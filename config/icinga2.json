@@ -13,6 +13,18 @@
   "dashboard": {
     "show_only_hard_state_problems": false,
     "timezone": "UTC",
-    "room_climate_service": ""
+    "room_climate_service" : {
+      "enabled": false,
+      "name": "...",
+      "temperature_perf_data_name": "temperature",
+      "humidity_perf_data_name": "humidity"
+    },
+    "isp_service": {
+      "enabled": false,
+      "downstream_name": "...",
+      "downstream_perf_data_name": "downstream_max",
+      "upstream_name": "...",
+      "upstream_perf_data_name": "upstream_max"
+    }
   }
 }

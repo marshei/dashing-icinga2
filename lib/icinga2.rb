@@ -65,14 +65,18 @@ class Icinga2
   attr_reader :service_count_acknowledged
 
   attr_reader :room_climate_service_enabled
-  attr_reader :room_climate_service
+  attr_reader :room_climate_service_name
+  attr_reader :room_climate_temperature_perf_data_name
   attr_reader :room_climate_temperature
+  attr_reader :room_climate_humidity_perf_data_name
   attr_reader :room_climate_humidity
 
   attr_reader :isp_service_enabled
-  attr_reader :isp_downstream_service
+  attr_reader :isp_downstream_service_name
+  attr_reader :isp_downstream_perf_data_name
   attr_reader :isp_downstream
-  attr_reader :isp_upstream_service
+  attr_reader :isp_upstream_service_name
+  attr_reader :isp_upstream_perf_data_name
   attr_reader :isp_upstream
 
   # data providers
@@ -187,18 +191,24 @@ class Icinga2
 
           @room_climate_service_enabled = false
           if config_dashboard.key? 'room_climate_service'
-            if config_dashboard['room_climate_service'].size > 0
-              @room_climate_service = config_dashboard['room_climate_service']
+            config_room_climate = config_dashboard['room_climate_service']
+            if config_room_climate.key? 'enabled' and config_room_climate['enabled']
               @room_climate_service_enabled = true
+              @room_climate_service_name = config_room_climate['name']
+              @room_climate_temperature_perf_data_name = config_room_climate['temperature_perf_data_name']
+              @room_climate_humidity_perf_data_name = config_room_climate['humidity_perf_data_name']
             end
           end
 
           @isp_service_enabled = false
-          if config_dashboard.key? 'isp_downstream_service' and config_dashboard.key? 'isp_upstream_service'
-            if config_dashboard['isp_downstream_service'].size > 0 and config_dashboard['isp_upstream_service'].size > 0
-              @isp_downstream_service = config_dashboard['isp_downstream_service']
-              @isp_upstream_service = config_dashboard['isp_upstream_service']
+          if config_dashboard.key? 'isp_service'
+            config_isp = config_dashboard['isp_service']
+            if config_isp.key? 'enabled' and config_isp['enabled']
               @isp_service_enabled = true
+              @isp_downstream_service_name = config_isp['downstream_name']
+              @isp_downstream_perf_data_name = config_isp['downstream_perf_data_name']
+              @isp_upstream_service_name = config_isp['upstream_name']
+              @isp_upstream_perf_data_name = config_isp['upstream_perf_data_name']
             end
           end
         end
@@ -217,8 +227,8 @@ class Icinga2
         @nodeName = nil
         @showOnlyHardStateProblems = false
         @time_zone = "UTC"
-        @room_climate_service = ""
         @room_climate_service_enabled = false
+        @isp_service_enabled = false
 
         # external attribute
         @icingaweb2_url = 'http://localhost/icingaweb2'
@@ -769,17 +779,13 @@ class Icinga2
     @version = version_str
   end
 
-  def getServicePerfData(service_name, service_result, perf_data_name, unit_to_delete)
+  def getServicePerfData(service_name, service_result, perf_data_name)
     ret_value = 0.0
     service_result.each do |service|
       service["attrs"]["last_check_result"]["performance_data"].each do |perf|
         if perf.start_with?(perf_data_name)
-          if unit_to_delete.size > 0
-            ret_value = perf.split('=')[1].split(';')[0].delete(unit_to_delete).to_f
-          elsif
-            ret_value = perf.split('=')[1].split(';')[0].to_f
-          end
-          # puts perf_data_name + " for " + service_name + ": " + ret_value.to_s
+          ret_value = perf.split('=')[1].split(';')[0].gsub(/[^0-9. ]/i, '').to_f
+          #puts perf_data_name + " for " + service_name + ": " + ret_value.to_s
         end
       end
     end
@@ -801,7 +807,7 @@ class Icinga2
     seconds = seconds_diff
 
     return "#{days}d #{hours}h #{minutes}m"
- end
+  end
 
   def initializeAttributes()
     @version = "Not running"
@@ -926,20 +932,20 @@ class Icinga2
     # get room climate information
     if @room_climate_service_enabled
       room_climate_result = getServiceObjects(["last_check_result"],
-                               "match(\"*" + @room_climate_service + "*\",service.name)", nil)
-      @room_climate_temperature = getServicePerfData(@room_climate_service, room_climate_result, "temperature", "")
-      @room_climate_humidity =  getServicePerfData(@room_climate_service, room_climate_result, "humidity", "%")
+                               "match(\"*" + @room_climate_service_name + "*\",service.name)", nil)
+      @room_climate_temperature = getServicePerfData(@room_climate_service_name, room_climate_result, @room_climate_temperature_perf_data_name)
+      @room_climate_humidity =  getServicePerfData(@room_climate_service_name, room_climate_result, @room_climate_humidity_perf_data_name)
     end
 
     # get the ISP information
     if @isp_service_enabled
       isp_service_result = getServiceObjects(["last_check_result"],
-                              "match(\"*" + @isp_downstream_service + "*\",service.name)", nil)
-      @isp_downstream = getServicePerfData(@isp_downstream_service, isp_service_result, "downstream_max", "")
+                              "match(\"*" + @isp_downstream_service_name + "*\",service.name)", nil)
+      @isp_downstream = getServicePerfData(@isp_downstream_service_name, isp_service_result, @isp_downstream_perf_data_name)
 
       isp_service_result = getServiceObjects(["last_check_result"],
-                              "match(\"*" + @isp_upstream_service + "*\",service.name)", nil)
-      @isp_upstream = getServicePerfData(@isp_upstream_service, isp_service_result, "upstream_max", "")
+                              "match(\"*" + @isp_upstream_service_name + "*\",service.name)", nil)
+      @isp_upstream = getServicePerfData(@isp_upstream_service_name, isp_service_result, @isp_upstream_perf_data_name)
     end
   end
 end
