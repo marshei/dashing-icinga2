@@ -281,7 +281,7 @@ class Icinga2
   end
 
   def getApiData(apiUrl, requestBody = nil)
-    restClient = RestClient::Resource.new(URI.encode(apiUrl), @options)
+    restClient = RestClient::Resource.new(sprintf('%s/%s', @apiUrlBase, apiUrl), @options)
 
     maxRetries = 30
     retried = 0
@@ -318,8 +318,7 @@ class Icinga2
   end
 
   def getIcingaApplicationData()
-    apiUrl = sprintf('%s/status/IcingaApplication', @apiUrlBase)
-    data = getApiData(apiUrl)
+    data = getApiData('status/IcingaApplication')
 
     if not data or not data.has_key?('results') or data['results'].empty? or not data['results'][0].has_key?('status')
       return nil
@@ -329,8 +328,7 @@ class Icinga2
   end
 
   def getCIBData()
-    apiUrl = sprintf('%s/status/CIB', @apiUrlBase)
-    data = getApiData(apiUrl)
+    data = getApiData('status/CIB')
 
     if not data or not data.has_key?('results') or data['results'].empty? or not data['results'][0].has_key?('status')
       return nil
@@ -340,8 +338,7 @@ class Icinga2
   end
 
   def getStatusData()
-    apiUrl = sprintf('%s/status', @apiUrlBase)
-    data = getApiData(apiUrl)
+    data = getApiData('status')
 
     if not data or not data.has_key?('results')
       return nil
@@ -351,8 +348,6 @@ class Icinga2
   end
 
   def getHostObjects(attrs = nil, filter = nil, joins = nil)
-    apiUrl = sprintf('%s/objects/hosts', @apiUrlBase)
-
     requestBody = {}
 
     if (attrs)
@@ -368,7 +363,7 @@ class Icinga2
     end
 
     # fetch data with requestBody (which means X-HTTP-Method-Override: GET)
-    data = getApiData(apiUrl, requestBody)
+    data = getApiData('objects/hosts', requestBody)
 
     if not data or not data.has_key?('results')
       return nil
@@ -378,8 +373,6 @@ class Icinga2
   end
 
   def getServiceObjects(attrs = nil, filter = nil, joins = nil)
-    apiUrl = sprintf('%s/objects/services', @apiUrlBase)
-
     requestBody = {}
 
     if (attrs)
@@ -399,7 +392,7 @@ class Icinga2
     #puts "request body: " + requestBody.to_s
 
     # fetch data with requestBody (which means X-HTTP-Method-Override: GET)
-    data = getApiData(apiUrl, requestBody)
+    data = getApiData('objects/services', requestBody)
 
     if not data or not data.has_key?('results')
       return nil
