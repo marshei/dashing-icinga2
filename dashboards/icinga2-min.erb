@@ -8,99 +8,6 @@ $(function() {
   Dashing.numColumns = 4
 });
 </script>
-<!--
-<style type="text/css">
-body {
-  font-size: 12px;
-}
-
-h1 {
-   font-size: 24px;
-   margin-bottom: 5px;
-   margin-top: 5px;
-}
-
-h2 {
-   font-size: 20px;
-}
-
-h3 {
-   margin-bottom: 2px;
-   margin-top: 2px;
-   font-size: 18px;
-}
-
-li {
-   font-size: 10px;
-}
-
-.updated-at {
-  font-size: 10px;
-  bottom: 2px;
-}
-
-.more-info {
-  font-size: 10px;
-  bottom: 15px;
-}
-
-.unit-info {
-  font-size: 10px;
-  bottom: 15px;
-}
-
-.widget {
-  vertical-align: top;
-  padding: 2px 3px;
-}
-
-.widget-number .change-rate {
-     font-size: 16px;
-}
-.widget-number h2 {
-     font-size: 50px;
-}
-.widget-news h1 {
-     font-size: 24px;
-}
-.widget-news h2 {
-     font-size: 20px;
-}
-.widget-time-since_last p {
-     font-size: 16px;
-}
-.widget-list li {
-  margin: 0 3px;
-}
-.widget-list ol {
-  margin: 0 3px;
-}
-.widget-list ul {
-  margin: 0 3px;
-}
-.widget-list .value {
-  margin-left: 4px;
-}
-.widget-comments .title  {
-  margin-bottom: 5px;
-}
-.widget-graph .x_tick .title {
-    font-size: 10px;
-    font-weight: 600;
-}
-.widget-graph .y_tick .title {
-    font-size: 8px;
-    font-weight: 600;
-}
-.widget-comments.twitter_mentions p {
-    font-size: 15px;
-}
-.icon-background {
-  opacity: 0.1;
-  font-size: 125px;
-}
-</style>
--->
 
 <% content_for :title do %>Icinga 2 @ fritz.box<% end %>
 <div class="gridster">
@@ -109,7 +16,7 @@ li {
     <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
       <div
         data-view="Clock"
-        data-title="<%=getTimeZone()%>"
+        data-title="Frankfurt am Main"
         data-timezone="<%=getTimeZone()%>"
         data-locale="de-DE"
       ></div>
@@ -139,15 +46,28 @@ li {
     </li>
 
     <li data-row="1" data-col="4" data-sizex="1" data-sizey="1">
-      <div class="scrollable" data-id="icinga-severity" data-view="List" data-unordered="true" data-title="Problems"></div>
+      <div class="scrollable"
+        data-id="icinga-severity"
+        data-view="List"
+        data-unordered="true"
+        data-title="Problems"
+      ></div>
     </li>
 
     <li data-row="2" data-col="1" data-sizex="1" data-sizey="1">
-      <div data-id="icinga-room-climate" data-view="Number" data-title="Room Climate"></div>
+      <div
+        data-id="icinga-room-climate"
+        data-view="Number"
+        data-title="Room Climate"
+      ></div>
     </li>
 
     <li data-row="2" data-col="1" data-sizex="1" data-sizey="1">
-      <div data-id="icinga-isp" data-view="Datatransfer" data-title="Internet Access"></div>
+      <div
+        data-id="icinga-isp"
+        data-view="Datatransfer"
+        data-title="Internet Access"
+      ></div>
     </li>
 
     <li data-row="2" data-col="3" data-sizex="1" data-sizey="1">
@@ -166,7 +86,12 @@ li {
     </li>
 
     <li data-row="2" data-col="4" data-sizex="1" data-sizey="1">
-      <div data-id="icinga-stats" data-view="List" data-unordered="true" data-title="Statistics"></div>
+      <div
+        data-id="icinga-stats"
+        data-view="List"
+        data-unordered="true"
+        data-title="Statistics"
+      ></div>
     </li>
 
   </ul>
