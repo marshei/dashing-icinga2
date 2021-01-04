@@ -2,7 +2,7 @@
 // Sass declarations
 // ----------------------------------------------------------------------------
 $background-color:  #47bbb3;
-$down-stream-color: #fff;
+$value-color: #fff;
 
 $title-color:       rgb(255, 255, 255);
 $unitinfo-color:    rgb(255, 255, 255);
@@ -19,13 +19,15 @@ $unitinfo-color:    rgb(255, 255, 255);
   }
 
   .down-stream {
-    color: $down-stream-color;
+    font-size: 78px;
+    font-weight: 700;
+    color: $value-color;
   }
 
   .up-stream {
-    font-weight: 500;
-    font-size: 30px;
-    color: $down-stream-color;
+    font-size: 40px;
+    font-weight: 700;
+    color: $value-color;
   }
 
   .unit-info {

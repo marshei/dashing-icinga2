@@ -19,16 +19,19 @@ $moreinfo-color:    rgb(255, 255, 255);
   }
 
   .value {
+    font-size: 78px;
+    font-weight: 700;
     color: $value-color;
   }
 
   .change-rate {
-    font-weight: 500;
-    font-size: 30px;
+    font-size: 40px;
+    font-weight: 700;
     color: $value-color;
   }
 
   .more-info {
+    font-size: 26px;
     color: $moreinfo-color;
   }
 
