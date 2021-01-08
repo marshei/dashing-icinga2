@@ -27,15 +27,15 @@ fi
 
 DASHING_PORT=8005
 DASHING_PID_FILE="tmp/pids/thin.pid"
-DASHING_BIN=dashing
+DASHING_BIN=smashing
 
 usage(){
 cat << EOF
 usage: $0 options
- This script restarts the Dashing daemon.
+ This script restarts the $DASHING_BIN daemon.
  OPTIONS:
     -h        Show this message
-    -p        Port where Dashing will listen (defaults to 3030)
+    -p        Port where $DASHING_BIN will listen (defaults to 8005)
     -P        PID file path (defaults to tmp/pids/thin.pid)
     -D        Change to this directory before starting the daemon (defaults to current directory)
     -b        Path to the dashing binary (defaults to just 'dashing' from system path)
@@ -102,5 +102,5 @@ done
 
 PID=$(<"$DASHING_PID_FILE")
 
-echo "Restarted Dashing with PID $PID listening on port $DASHING_PORT."
+echo "Restarted $DASHING_BIN with PID $PID listening on port $DASHING_PORT."
 exit $ERR
