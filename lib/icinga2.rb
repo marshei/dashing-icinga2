@@ -805,7 +805,31 @@ class Icinga2
 
     seconds = seconds_diff
 
-    return "#{days}d #{hours}h #{minutes}m"
+    ret_value = ""
+
+    if days > 0
+       ret_value = "#{days}d"
+    end
+
+    if hours > 0
+      if not ret_value.empty?
+        ret_value += " "
+      end
+      ret_value = ret_value + "#{hours}h"
+    end
+
+    if minutes > 0
+      if not ret_value.empty?
+        ret_value += " "
+      end
+      ret_value = ret_value + "#{minutes}m"
+    end
+
+    if ret_value.empty?
+      ret_value = "#{seconds}s"
+    end
+
+    return ret_value
   end
 
   def initializeAttributes()
