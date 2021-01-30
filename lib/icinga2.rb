@@ -78,6 +78,9 @@ class Icinga2
   attr_reader :isp_upstream_service_name
   attr_reader :isp_upstream_perf_data_name
   attr_reader :isp_upstream
+  attr_reader :isp_connection_uptime_service_name
+  attr_reader :isp_connection_uptime_perf_data_name
+  attr_reader :isp_connection_uptime
 
   # data providers
   attr_reader :app_data
@@ -209,6 +212,8 @@ class Icinga2
               @isp_downstream_perf_data_name = config_isp['downstream_perf_data_name']
               @isp_upstream_service_name = config_isp['upstream_name']
               @isp_upstream_perf_data_name = config_isp['upstream_perf_data_name']
+              @isp_connection_uptime_service_name = config_isp['connection_uptime_name']
+              @isp_connection_uptime_perf_data_name = config_isp['connection_uptime_perf_data_name']
             end
           end
         end
@@ -281,6 +286,9 @@ class Icinga2
   end
 
   def getApiData(apiUrl, requestBody = nil)
+    # debug
+    # puts ""
+    # puts "URL: " + @apiUrlBase + "/" + apiUrl
     restClient = RestClient::Resource.new(sprintf('%s/%s', @apiUrlBase, apiUrl), @options)
 
     maxRetries = 30
@@ -292,7 +300,7 @@ class Icinga2
         payload = JSON.generate(requestBody)
 
         # debug
-        #puts "Payload: " + payload
+        # puts "Payload: " + payload
         res = restClient.post(payload, @headers)
       else
         res = restClient.get(@headers)
@@ -311,7 +319,7 @@ class Icinga2
 
     body = res.body
     # debug
-    #puts "Body: " + body
+    # puts "Body: " + body
     data = JSON.parse(body)
 
     return data
@@ -873,6 +881,7 @@ class Icinga2
 
     @isp_downstream = 0
     @isp_upstream = 0
+    @isp_connection_uptime = 0
 
     @app_data = nil
     @cib_data = nil
@@ -969,6 +978,11 @@ class Icinga2
       isp_service_result = getServiceObjects(["last_check_result"],
                               "match(\"*" + @isp_upstream_service_name + "*\",service.name)", nil)
       @isp_upstream = getServicePerfData(@isp_upstream_service_name, isp_service_result, @isp_upstream_perf_data_name)
+
+      isp_service_result = getServiceObjects(["last_check_result"],
+                              "match(\"*" + @isp_connection_uptime_service_name + "*\",service.name)", nil)
+      @isp_connection_uptime = getUptimeString(
+                                  getServicePerfData(@isp_connection_uptime_service_name, isp_service_result, @isp_connection_uptime_perf_data_name))
     end
   end
 end

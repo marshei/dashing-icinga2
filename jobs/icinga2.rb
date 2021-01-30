@@ -229,7 +229,7 @@ SCHEDULER.every '15s', :first_in => 0 do |job|
     send_event('icinga-isp', {
       downstream: icinga.isp_downstream.round,
       upstream: icinga.isp_upstream.round,
-      unitinfo: "In Mbit/s"
+      unitinfo: "Since: " + icinga.isp_connection_uptime + " | Mbit/s"
     })
   end
 end
