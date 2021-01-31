@@ -6,6 +6,7 @@ $value-color: #fff;
 
 $title-color:       rgb(255, 255, 255);
 $unitinfo-color:    rgb(255, 255, 255);
+$totals-color:      rgb(255, 255, 255);
 
 // ----------------------------------------------------------------------------
 // Widget-datatransfer styles
@@ -34,4 +35,7 @@ $unitinfo-color:    rgb(255, 255, 255);
     color: $unitinfo-color;
   }
 
+  .totals-info {
+    color: $totals-color;
+  }
 }

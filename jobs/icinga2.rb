@@ -225,11 +225,17 @@ SCHEDULER.every '15s', :first_in => 0 do |job|
   end
 
   if icinga.isp_downstream != icinga_previous.isp_downstream or
-     icinga.isp_upstream != icinga_previous.isp_upstream
+     icinga.isp_upstream != icinga_previous.isp_upstream or
+     icinga.isp_connection_uptime != icinga_previous.isp_connection_uptime or
+     icinga.isp_connection_totals_received != icinga_previous.isp_connection_totals_received or
+     icinga.isp_connection_totals_sent != icinga_previous.isp_connection_totals_sent
     send_event('icinga-isp', {
       downstream: icinga.isp_downstream.round,
       upstream: icinga.isp_upstream.round,
-      unitinfo: "Since: " + icinga.isp_connection_uptime + " | Mbit/s"
+      unitinfo: "Since: " + icinga.isp_connection_uptime + " | Mbit/s",
+      totaldown: icinga.isp_connection_totals_received.round(1),
+      totalup: icinga.isp_connection_totals_sent.round(1),
+      totalsuffix: " " + icinga.isp_connection_totals_unit
     })
   end
 end

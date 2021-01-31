@@ -81,6 +81,12 @@ class Icinga2
   attr_reader :isp_connection_uptime_service_name
   attr_reader :isp_connection_uptime_perf_data_name
   attr_reader :isp_connection_uptime
+  attr_reader :isp_connection_totals_service_name
+  attr_reader :isp_connection_totals_received_perf_data_name
+  attr_reader :isp_connection_totals_received
+  attr_reader :isp_connection_totals_sent_perf_data_name
+  attr_reader :isp_connection_totals_sent
+  attr_reader :isp_connection_totals_unit
 
   # data providers
   attr_reader :app_data
@@ -214,6 +220,9 @@ class Icinga2
               @isp_upstream_perf_data_name = config_isp['upstream_perf_data_name']
               @isp_connection_uptime_service_name = config_isp['connection_uptime_name']
               @isp_connection_uptime_perf_data_name = config_isp['connection_uptime_perf_data_name']
+              @isp_connection_totals_service_name = config_isp['connection_totals_name']
+              @isp_connection_totals_received_perf_data_name = config_isp['connection_totals_received_perf_data_name']
+              @isp_connection_totals_sent_perf_data_name = config_isp['connection_totals_sent_perf_data_name']
             end
           end
         end
@@ -882,6 +891,9 @@ class Icinga2
     @isp_downstream = 0
     @isp_upstream = 0
     @isp_connection_uptime = 0
+    @isp_connection_totals_received = 0
+    @isp_connection_totals_sent = 0
+    @isp_connection_totals_unit = "GB"
 
     @app_data = nil
     @cib_data = nil
@@ -983,6 +995,11 @@ class Icinga2
                               "match(\"*" + @isp_connection_uptime_service_name + "*\",service.name)", nil)
       @isp_connection_uptime = getUptimeString(
                                   getServicePerfData(@isp_connection_uptime_service_name, isp_service_result, @isp_connection_uptime_perf_data_name))
+
+      isp_service_result = getServiceObjects(["last_check_result"],
+                              "match(\"*" + @isp_connection_totals_service_name + "*\",service.name)", nil)
+      @isp_connection_totals_received = getServicePerfData(@isp_connection_totals_service_name, isp_service_result, @isp_connection_totals_received_perf_data_name)
+      @isp_connection_totals_sent = getServicePerfData(@isp_connection_totals_service_name, isp_service_result, @isp_connection_totals_sent_perf_data_name)
     end
   end
 end
