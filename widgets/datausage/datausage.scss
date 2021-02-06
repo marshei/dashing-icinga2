@@ -6,12 +6,12 @@ $value-color: #fff;
 
 $title-color:       rgb(255, 255, 255);
 $unitinfo-color:    rgb(255, 255, 255);
-$uptime-color:      rgb(255, 255, 255);
+$totals-color:      rgb(255, 255, 255);
 
 // ----------------------------------------------------------------------------
 // Widget-datatransfer styles
 // ----------------------------------------------------------------------------
-.widget-datatransfer {
+.widget-datausage {
 
   background-color: $background-color;
 
@@ -31,8 +31,8 @@ $uptime-color:      rgb(255, 255, 255);
     color: $value-color;
   }
 
-  .uptime-info {
-    color: $uptime-color;
+  .totals-info {
+    color: $totals-color;
   }
 
   .unit-info {

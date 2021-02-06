@@ -8,7 +8,10 @@
   <i class="fa fa-arrow-up"></i>&nbsp<span data-bind="upstream"></span>
 </p>
 
-<p class="uptime-info" data-bind="uptimeinfo"></p>
+<p class="totals-info">
+  <i data-bind-class="total-arrow-down"></i>&nbsp<span data-bind="totaldown | append totalsuffix"></span>
+  <i data-bind-class="total-arrow-up"></i>&nbsp<span data-bind="totalup | append totalsuffix"></span>
+</p>
 <p class="unit-info" data-bind="unitinfo"></p>
 
 <p class="updated-at" data-bind="updatedAtMessage"></p>

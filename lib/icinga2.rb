@@ -84,8 +84,10 @@ class Icinga2
   attr_reader :isp_connection_totals_service_name
   attr_reader :isp_connection_totals_received_perf_data_name
   attr_reader :isp_connection_totals_received
+  attr_reader :isp_connection_totals_received_hourly_rate
   attr_reader :isp_connection_totals_sent_perf_data_name
   attr_reader :isp_connection_totals_sent
+  attr_reader :isp_connection_totals_sent_hourly_rate
   attr_reader :isp_connection_totals_unit
 
   # data providers
@@ -849,6 +851,17 @@ class Icinga2
     return ret_value
   end
 
+  def getHourlyRate(value, seconds)
+    seconds_diff = seconds.to_i.abs
+
+    if seconds_diff < 3600
+      return value
+    end
+
+    hours = seconds_diff / 3600
+    return value / hours
+  end
+
   def initializeAttributes()
     @version = "Not running"
     @node_name = ""
@@ -892,7 +905,9 @@ class Icinga2
     @isp_upstream = 0
     @isp_connection_uptime = 0
     @isp_connection_totals_received = 0
+    @isp_connection_totals_received_hourly_rate = 0
     @isp_connection_totals_sent = 0
+    @isp_connection_totals_sent_hourly_rate = 0
     @isp_connection_totals_unit = "GB"
 
     @app_data = nil
@@ -993,13 +1008,16 @@ class Icinga2
 
       isp_service_result = getServiceObjects(["last_check_result"],
                               "match(\"*" + @isp_connection_uptime_service_name + "*\",service.name)", nil)
-      @isp_connection_uptime = getUptimeString(
-                                  getServicePerfData(@isp_connection_uptime_service_name, isp_service_result, @isp_connection_uptime_perf_data_name))
+      isp_uptime_seconds = getServicePerfData(@isp_connection_uptime_service_name, isp_service_result, @isp_connection_uptime_perf_data_name)
+      @isp_connection_uptime = getUptimeString(isp_uptime_seconds)
 
       isp_service_result = getServiceObjects(["last_check_result"],
                               "match(\"*" + @isp_connection_totals_service_name + "*\",service.name)", nil)
       @isp_connection_totals_received = getServicePerfData(@isp_connection_totals_service_name, isp_service_result, @isp_connection_totals_received_perf_data_name)
       @isp_connection_totals_sent = getServicePerfData(@isp_connection_totals_service_name, isp_service_result, @isp_connection_totals_sent_perf_data_name)
+
+      @isp_connection_totals_received_hourly_rate = getHourlyRate(@isp_connection_totals_received, isp_uptime_seconds)
+      @isp_connection_totals_sent_hourly_rate = getHourlyRate(@isp_connection_totals_sent, isp_uptime_seconds)
     end
   end
 end
