@@ -22,7 +22,7 @@ require './lib/icinga2'
 # initialize data provider
 icinga = Icinga2.new('config/icinga2.json') # fixed path
 
-SCHEDULER.every '15s', :first_in => 0 do |job|
+SCHEDULER.every '15s', allow_overlapping: false, :first_in => 0 do |job|
   # shallow copy of the icinga object to detect changes in values
   icinga_previous = icinga.dup
   # run data provider
