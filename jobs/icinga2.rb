@@ -55,22 +55,37 @@ SCHEDULER.every '15s', allow_overlapping: false, :first_in => 0 do |job|
   #puts "Stats: " + icinga_stats.to_s
 
   ### Events
-  if icinga.host_count_problems != icinga_previous.host_count_problems or
-     icinga.host_count_all != icinga_previous.host_count_all
+  if icinga.host_count_all != icinga_previous.host_count_all or
+     icinga.host_count_problems != icinga_previous.host_count_problems
+
+    moreinfo_msg = ""
+    if icinga.host_count_problems > 0
+      moreinfo_msg = "Problems: " + icinga.host_count_problems.to_s + ", " +
+                     "Down: " + icinga.host_count_problems_down.to_s
+    end
+
     send_event('icinga-host-meter', {
-      value: icinga.host_count_problems,
-      max:   icinga.host_count_all,
-      moreinfo: "Total hosts: " + icinga.host_count_all.to_s,
-      color: 'blue' })
+      value: icinga.host_count_all - icinga.host_count_problems,
+      min: 0,
+      max: icinga.host_count_all,
+      moreinfo: moreinfo_msg })
   end
 
-  if icinga.service_count_problems != icinga_previous.service_count_problems or
-     icinga.service_count_all != icinga_previous.service_count_all
+  if icinga.service_count_all != icinga_previous.service_count_all or
+     icinga.service_count_problems != icinga_previous.service_count_problems or
+
+    moreinfo_msg = ""
+    if icinga.service_count_problems > 0
+      moreinfo_msg = "Warning: " + icinga.service_count_problems_warning.to_s + ", " +
+                     "Critical: " + icinga.service_count_problems_critical.to_s + ", " +
+                     "Unknown: " + icinga.service_count_problems_unknown.to_s
+    end
+
     send_event('icinga-service-meter', {
-      value: icinga.service_count_problems,
+      value: icinga.service_count_all - icinga.service_count_problems,
+      min:   0,
       max:   icinga.service_count_all,
-      moreinfo: "Total services: " + icinga.service_count_all.to_s,
-      color: 'blue' })
+      moreinfo: moreinfo_msg })
   end
 
   send_event('icinga-stats', {
@@ -79,7 +94,7 @@ SCHEDULER.every '15s', allow_overlapping: false, :first_in => 0 do |job|
    color: 'blue' })
 
   #### Doughnuts
-  if icinga.host_count_up != icinga_previous.host_count_up or
+  if icinga.host_count_all != icinga_previous.host_count_all or
      icinga.host_count_problems_down != icinga_previous.host_count_problems_down
 
     moreinfo_msg = "Total hosts: " + icinga.host_count_all.to_s
@@ -91,27 +106,24 @@ SCHEDULER.every '15s', allow_overlapping: false, :first_in => 0 do |job|
       type: "doughnut",
       header: "Hosts",
       labels: [ "UP", "Down" ],
-      datasets: [ icinga.host_count_up, icinga.host_count_problems_down ],
+      datasets: [ icinga.host_count_all, icinga.host_count_problems_down ],
       moreinfo: moreinfo_msg,
     })
   end
 
-  if icinga.service_count_ok != icinga_previous.service_count_ok or
-     icinga.service_count_problems_warning != icinga_previous.service_count_problems_warning or
-     icinga.service_count_problems_critical != icinga_previous.service_count_problems_critical or
-     icinga.service_count_problems_unknown != icinga_previous.service_count_problems_unknown
+  if icinga.service_count_all != icinga_previous.service_count_all or
+     icinga.service_count_problems != icinga_previous.service_count_problems or
 
     moreinfo_msg = "Total services: " + icinga.service_count_all.to_s
-    service_count_not_ok = icinga.service_count_problems_warning + icinga.service_count_problems_critical + icinga.service_count_problems_unknown
-    if service_count_not_ok > 0
-      moreinfo_msg += " (Not OK: " + service_count_not_ok.to_s + ")"
+    if icinga.service_count_problems > 0
+      moreinfo_msg += " (Not OK: " + icinga.service_count_problems.to_s + ")"
     end
 
     send_event('doughnut-pie-services', {
       type: "doughnut",
       header: "Services",
       labels: [ "OK", "Warning", "Critical", "Unknown" ],
-      datasets: [ icinga.service_count_ok, icinga.service_count_problems_warning, icinga.service_count_problems_critical, icinga.service_count_problems_unknown ],
+      datasets: [ icinga.service_count_all, icinga.service_count_problems_warning, icinga.service_count_problems_critical, icinga.service_count_problems_unknown ],
       moreinfo: moreinfo_msg,
     })
   end
