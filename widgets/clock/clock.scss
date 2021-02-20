@@ -14,11 +14,15 @@ $background-color:  #dc5945;
   }
 
   .date {
+    font-size: 14px;
+    margin: 10px;
   }
 
   .time {
-    font-size: 84px;
+    font-size: 74px;
     font-weight: 700;
+    margin: -25px;
+    padding: 0;
   }
 
 }

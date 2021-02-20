@@ -2,7 +2,7 @@
 $(function() {
   // These settings override the defaults set in application.coffee. You can do this on a per dashboard basis.
   Dashing.widget_margins = [5,5]
-  Dashing.widget_base_dimensions = [300,300]
+  Dashing.widget_base_dimensions = [300,150]
   //Experimental: widget size based on window size.
   //Dashing.widget_base_dimensions = [$( window ).width()/5, $( window ).height()/2.5];
   Dashing.numColumns = 4
@@ -12,24 +12,32 @@ $(function() {
 <% content_for :title do %>Icinga 2 @ fritz.box<% end %>
 <div class="gridster">
   <ul>
-    <!-- Statistics -->
     <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
       <div
         data-view="Clock"
         data-title="Frankfurt am Main"
-        data-timezone="<%=getTimeZone()%>"
+        data-timezone="Europe/Berlin"
         data-locale="de-DE"
       ></div>
     </li>
 
-    <li data-row="1" data-col="2" data-sizex="1" data-sizey="1">
+    <li data-row="2" data-col="1" data-sizex="1" data-sizey="1">
+      <div
+        data-view="Clock"
+        data-title="Bangkok"
+        data-timezone="Asia/Bangkok"
+        data-locale="de-DE"
+      ></div>
+    </li>
+
+    <li data-row="1" data-col="2" data-sizex="1" data-sizey="2">
       <div
            data-id="icinga-host-meter"
            data-view="Meter"
            data-title="Hosts"
       ></div>
     </li>
-    <li data-row="1" data-col="3" data-sizex="1" data-sizey="1">
+    <li data-row="1" data-col="3" data-sizex="1" data-sizey="2">
       <div
         data-id="icinga-service-meter"
         data-view="Meter"
@@ -37,7 +45,7 @@ $(function() {
       ></div>
     </li>
 
-    <li data-row="1" data-col="4" data-sizex="1" data-sizey="1">
+    <li data-row="1" data-col="4" data-sizex="1" data-sizey="2">
       <div class="scrollable"
         data-id="icinga-severity"
         data-view="List"
@@ -46,7 +54,7 @@ $(function() {
       ></div>
     </li>
 
-    <li data-row="2" data-col="1" data-sizex="1" data-sizey="1">
+    <li data-row="3" data-col="1" data-sizex="1" data-sizey="2">
       <div
         data-id="icinga-room-climate"
         data-view="Number"
@@ -54,21 +62,21 @@ $(function() {
       ></div>
     </li>
 
-    <li data-row="2" data-col="2" data-sizex="1" data-sizey="1">
+    <li data-row="3" data-col="2" data-sizex="1" data-sizey="2">
       <div
         data-id="icinga-isp"
         data-view="Datatransfer"
       ></div>
     </li>
 
-    <li data-row="2" data-col="3" data-sizex="1" data-sizey="1">
+    <li data-row="3" data-col="3" data-sizex="1" data-sizey="2">
       <div
         data-id="icinga-isp-usage"
         data-view="Datausage"
       ></div>
     </li>
 
-    <li data-row="2" data-col="4" data-sizex="1" data-sizey="1">
+    <li data-row="3" data-col="4" data-sizex="1" data-sizey="2">
       <div
         data-id="icinga-stats"
         data-view="List"
