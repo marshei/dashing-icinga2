@@ -3,7 +3,7 @@ require './lib/icinga2'
 
 configure do
   set :auth_token, 'YOUR_AUTH_TOKEN'
-  set :default_dashboard, 'icinga2'
+  set :default_dashboard, 'icinga2-min'
 
   # allow iframes e.g. icingaweb2
   # https://github.com/Shopify/dashing/issues/199
