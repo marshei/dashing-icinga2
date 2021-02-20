@@ -1,30 +1,3 @@
-
-#`function generateLabels(chart) {
-#  var data = chart.data;
-#  if (data.labels.length && data.datasets.length) {
-#    return data.labels.map(function(label, i) {
-#      var meta = chart.getDatasetMeta(0);
-#      var style = meta.controller.getStyle(i);
-#
-#      // fetch the value
-#      var value = chart.config.data.datasets[arc._datasetIndex].data[arc._index];
-#
-#      return {
-#        // Add the numbers next to the label
-#        text: label + ": " + value,
-#        fillStyle: style.backgroundColor,
-#        strokeStyle: style.borderColor,
-#        lineWidth: style.borderWidth,
-#        hidden: isNaN(data.datasets[0].data[i]) || meta.data[i].hidden,
-#
-#        // Extra data used for toggling the correct item
-#        index: i
-# 	    };
-#    });
-#  }
-#  return [];
-#}`
-
 class Dashing.Chartjs extends Dashing.Widget
 
   constructor: ->
@@ -38,8 +11,9 @@ class Dashing.Chartjs extends Dashing.Widget
     Chart.defaults.global.legend.display = false
     Chart.defaults.global.legend.position = 'bottom'
 
-    Chart.defaults.doughnut.legend.position = 'right'
     Chart.defaults.doughnut.legend.display = true
+    Chart.defaults.doughnut.legend.position = 'right'
+    Chart.defaults.doughnut.legend.labels.boxWidth = 20
 
     Chart.defaults.bar.barThickness = 'flex'
     #Chart.defaults.bar.legend.display = false
@@ -115,7 +89,7 @@ class Dashing.Chartjs extends Dashing.Widget
 
   ensureChartExists: () ->
     if typeof @chart == "undefined"
-      @chart = new Chart(document.getElementById(@id), { type: @type, data: @merge labels: @labels, datasets: [@merge data: @datasets, @colors(@colorNames)] }, @options)
+      @chart = new Chart(document.getElementById(@id), { type: @type, data: @merge labels: @labels, datasets: [@merge data: @datasets, @colors(@colorNames)], @options })
 
   merge: (xs...) =>
     if xs?.length > 0
