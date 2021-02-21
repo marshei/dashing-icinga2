@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------------------
 // Sass declarations
 // ----------------------------------------------------------------------------
-$background-color:  #dc5945;
+@import "application.scss";
 
 // ----------------------------------------------------------------------------
 // Widget-clock styles
@@ -12,10 +12,19 @@ $background-color:  #dc5945;
 
   .title {
     margin: 5px;
+    color: $title-color;
   }
 
   .date {
     font-size: 14px;
+  }
+
+  .short-date {
+    font-size: 24px;
+  }
+
+  .weekday {
+    font-size: 24px;
   }
 
   .time {

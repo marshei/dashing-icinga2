@@ -20,9 +20,12 @@ class Dashing.Clock extends Dashing.Widget
       hour12: false
     };
 
-    date = new Date().toLocaleDateString(locale, optionsDate);
-    time = new Date().toLocaleTimeString(locale, optionsTime);
+    d = new Date()
+    date = d.toLocaleDateString(locale, optionsDate)
+    time = d.toLocaleTimeString(locale, optionsTime)
 
     @set('time', time)
     @set('date', date)
+    @set('weekday', d.toLocaleDateString(locale, { weekday: 'short' }))
+    @set('shortdate', d.toLocaleDateString(locale, { day: 'numeric', month: 'numeric' }))
     @set('title', @get('title'))

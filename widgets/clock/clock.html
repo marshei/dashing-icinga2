@@ -1,3 +1,10 @@
 <h3 class="title" data-bind="title"></h3>
-<h2 class="time" data-bind="time"></h2>
-<h3 class="date" data-bind="date"></h3>
+<table>
+    <tr>
+        <td rowspan="2" class="time" data-bind="time"></td>
+        <td class="weekday" data-bind="weekday"></td>
+    </tr>
+    <tr>
+        <td class="short-date" data-bind="shortdate"></td>
+    </tr>
+</table>
