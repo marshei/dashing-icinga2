@@ -26,6 +26,6 @@ class Dashing.Clock extends Dashing.Widget
 
     @set('time', time)
     @set('date', date)
-    @set('weekday', d.toLocaleDateString(locale, { weekday: 'short' }))
-    @set('shortdate', d.toLocaleDateString(locale, { day: 'numeric', month: 'numeric' }))
+    @set('weekday', d.toLocaleDateString(locale, { timeZone: zone, weekday: 'short' }))
+    @set('shortdate', d.toLocaleDateString(locale, { timeZone: zone, day: 'numeric', month: 'numeric' }))
     @set('title', @get('title'))
