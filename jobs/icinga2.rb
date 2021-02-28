@@ -230,9 +230,10 @@ SCHEDULER.every '15s', allow_overlapping: false, :first_in => 0 do |job|
   if icinga.room_climate_temperature != icinga_previous.room_climate_temperature or
      icinga.room_climate_humidity != icinga_previous.room_climate_humidity
     send_event('icinga-room-climate', {
-      current: icinga.room_climate_temperature,
-      suffix: "°C",
-      moreinfo: "Humidity: " + icinga.room_climate_humidity.round.to_s + " %H"
+      temperature: icinga.room_climate_temperature,
+      temperatureUnit: "°C",
+      humidity: icinga.room_climate_humidity.round,
+      humidityUnit: "%H"
     })
   end
 
@@ -240,7 +241,6 @@ SCHEDULER.every '15s', allow_overlapping: false, :first_in => 0 do |job|
      icinga.isp_upstream != icinga_previous.isp_upstream or
      icinga.isp_connection_uptime != icinga_previous.isp_connection_uptime
     send_event('icinga-isp', {
-      title: "Internet Access",
       downstream: icinga.isp_downstream.round,
       upstream: icinga.isp_upstream.round,
       uptimeinfo: "Link Uptime: " + icinga.isp_connection_uptime,
@@ -253,13 +253,22 @@ SCHEDULER.every '15s', allow_overlapping: false, :first_in => 0 do |job|
      icinga.isp_connection_totals_sent != icinga_previous.isp_connection_totals_sent or
      icinga.isp_connection_totals_sent_hourly_rate != icinga_previous.isp_connection_totals_sent_hourly_rate
     send_event('icinga-isp-usage', {
-      title: "Internet Usage",
       downstream: icinga.isp_connection_totals_received_hourly_rate.round(2),
       upstream: icinga.isp_connection_totals_sent_hourly_rate.round(2),
       totaldown: icinga.isp_connection_totals_received.round(1),
       totalup: icinga.isp_connection_totals_sent.round(1),
       totalsuffix: " " + icinga.isp_connection_totals_unit,
       unitinfo: icinga.isp_connection_totals_unit + "/h"
+    })
+  end
+
+  if icinga.dns_number_of_queries_today != icinga_previous.dns_number_of_queries_today or
+     icinga.dns_blocked_percentage_today != icinga_previous.dns_blocked_percentage_today
+    send_event('dns-stats', {
+      queriesToday: icinga.dns_number_of_queries_today.to_s.gsub(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1."),
+      queriesInfo: "Today: ",
+      blockedToday: icinga.dns_blocked_percentage_today.round(1),
+      blockedUnit: "%"
     })
   end
 end

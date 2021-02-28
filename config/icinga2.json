@@ -24,7 +24,16 @@
       "downstream_name": "...",
       "downstream_perf_data_name": "downstream_max",
       "upstream_name": "...",
-      "upstream_perf_data_name": "upstream_max"
+      "upstream_perf_data_name": "upstream_max",
+      "connection_uptime_name": "...",
+      "connection_uptime_perf_data_name": "uptime",
+      "connection_totals_name": "...",
+      "connection_totals_received_perf_data_name": "total_received",
+      "connection_totals_sent_perf_data_name": "total_sent"
+    },
+    "dns_service": {
+      "enabled": false,
+      "stats_url": "http://localhost/admin/api.php"
     }
   }
 }

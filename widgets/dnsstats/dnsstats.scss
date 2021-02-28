@@ -4,32 +4,22 @@
 @import "application.scss";
 
 // ----------------------------------------------------------------------------
-// Widget-clock styles
+// Widget-climate styles
 // ----------------------------------------------------------------------------
-.widget-clock {
+.widget-dnsstats {
 
   background-color: $background-color;
 
   .title {
-    margin: 5px;
     color: $title-color;
   }
 
-  .date {
-    font-size: 14px;
-  }
-
-  .short-date {
-    font-size: 24px;
-  }
-
-  .weekday {
-    font-size: 24px;
-  }
-
-  .time {
+  .blocked {
     font-size: 64px;
     font-weight: 700;
   }
 
+  .queries {
+    font-size: 24px;
+  }
 }

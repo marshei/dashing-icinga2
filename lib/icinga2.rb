@@ -90,6 +90,11 @@ class Icinga2
   attr_reader :isp_connection_totals_sent_hourly_rate
   attr_reader :isp_connection_totals_unit
 
+  attr_reader :dns_service_enabled
+  attr_reader :dns_service_stats_url
+  attr_reader :dns_number_of_queries_today
+  attr_reader :dns_blocked_percentage_today
+
   # data providers
   attr_reader :app_data
   attr_reader :cib_data
@@ -227,6 +232,16 @@ class Icinga2
               @isp_connection_totals_sent_perf_data_name = config_isp['connection_totals_sent_perf_data_name']
             end
           end
+
+          @dns_service_enabled = false
+          if config_dashboard.key? 'dns_service'
+            config_dns = config_dashboard['dns_service']
+            if config_dns.key? 'enabled' and config_dns['enabled']
+              @dns_service_enabled = true
+              @dns_service_stats_url = config_dns['stats_url']
+            end
+          end
+
         end
 
         if @config.key? 'icingaweb2'
@@ -786,6 +801,37 @@ class Icinga2
     return wqStats, clusterStats
   end
 
+  def getDnsStats()
+    # debug
+    # puts ""
+    # puts "URL: " + @dns_service_stats_url
+    restClient = RestClient::Resource.new(@dns_service_stats_url, @options)
+
+    maxRetries = 30
+    retried = 0
+
+    begin
+      res = restClient.get(@headers)
+    rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
+      if (retried < maxRetries)
+        retried += 1
+        $stderr.puts(format("Cannot execute request against '%s': '%s' (retry %d / %d)", @dns_service_stats_url, e, retried, maxRetries))
+        sleep(2)
+        retry
+      else
+        $stderr.puts("Maximum retries (%d) against '%s' reached. Giving up ...", maxRetries, apiUrl)
+        return nil
+      end
+    end
+
+    body = res.body
+    # debug
+    # puts "Body: " + body
+    data = JSON.parse(body)
+
+    return data
+  end
+
   def fetchVersion(version)
     #version = "v2.4.10-504-gab4ba18"
     #version = "2.11.0-1"
@@ -910,6 +956,9 @@ class Icinga2
     @isp_connection_totals_sent_hourly_rate = 0
     @isp_connection_totals_unit = "GB"
 
+    @dns_number_of_queries_today = 0
+    @dns_blocked_percentage_today = 0
+
     @app_data = nil
     @cib_data = nil
     @all_hosts_data = nil
@@ -1018,6 +1067,13 @@ class Icinga2
 
       @isp_connection_totals_received_hourly_rate = getHourlyRate(@isp_connection_totals_received, isp_uptime_seconds)
       @isp_connection_totals_sent_hourly_rate = getHourlyRate(@isp_connection_totals_sent, isp_uptime_seconds)
+    end
+
+    # get dns information
+    if @dns_service_enabled
+      dns_service_result = getDnsStats()
+      @dns_number_of_queries_today = dns_service_result["dns_queries_today"]
+      @dns_blocked_percentage_today = dns_service_result["ads_percentage_today"]
     end
   end
 end
