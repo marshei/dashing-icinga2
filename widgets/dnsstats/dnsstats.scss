@@ -19,6 +19,12 @@
     font-weight: 700;
   }
 
+  .blocked-disabled {
+    font-size: 64px;
+    font-weight: 700;
+    color: $background-color-yellow;
+  }
+
   .queries {
     font-size: 24px;
   }

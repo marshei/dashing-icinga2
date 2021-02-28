@@ -94,6 +94,7 @@ class Icinga2
   attr_reader :dns_service_stats_url
   attr_reader :dns_number_of_queries_today
   attr_reader :dns_blocked_percentage_today
+  attr_reader :dns_service_status_enabled
 
   # data providers
   attr_reader :app_data
@@ -958,6 +959,7 @@ class Icinga2
 
     @dns_number_of_queries_today = 0
     @dns_blocked_percentage_today = 0
+    @dns_service_status_enabled = false
 
     @app_data = nil
     @cib_data = nil
@@ -1074,6 +1076,9 @@ class Icinga2
       dns_service_result = getDnsStats()
       @dns_number_of_queries_today = dns_service_result["dns_queries_today"]
       @dns_blocked_percentage_today = dns_service_result["ads_percentage_today"]
+      if dns_service_result["status"].eql? "enabled"
+        @dns_service_status_enabled = true
+      end
     end
   end
 end

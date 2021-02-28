@@ -1,7 +1,7 @@
 <h3 class="title" data-bind="title"></h3>
 <table>
   <tr>
-    <td class="blocked" data-bind="blockedToday | append blockedUnit"></td>
+    <td data-bind-class="blockedClass" data-bind="blockedToday | append blockedUnit"></td>
   </tr>
   <tr>
     <td class="queries" data-bind="queriesToday | prepend queriesInfo"></td>
