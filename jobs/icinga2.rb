@@ -268,7 +268,7 @@ SCHEDULER.every '15s', allow_overlapping: false, :first_in => 0 do |job|
 
     if icinga.dns_service_status_enabled then info = "" else info = "- OFF - " end
     send_event('dns-stats', {
-      queriesToday: icinga.dns_number_of_queries_today.to_s.reverse.scan(/(?:\d*\.)?\d{1,3}-?/).join('.').reverse,
+      queriesToday: icinga.dns_number_of_queries_today,
       queriesInfo: info + "Today: ",
       blockedToday: icinga.dns_blocked_percentage_today.round(1),
       blockedUnit: "%",
