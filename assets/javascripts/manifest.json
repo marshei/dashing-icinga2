@@ -2,6 +2,19 @@
   "short_name": "Dashing with Icinga2",
   "name": "Dashing with Icinga2",
   "start_url": "/",
+  "scope": "/",
   "display": "fullscreen",
-  "orientation": "landscape"
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "/assets/icons-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/images/icons-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
 }
