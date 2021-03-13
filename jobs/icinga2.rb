@@ -72,7 +72,7 @@ SCHEDULER.every '15s', allow_overlapping: false, :first_in => 0 do |job|
   end
 
   if icinga.service_count_all != icinga_previous.service_count_all or
-     icinga.service_count_problems != icinga_previous.service_count_problems or
+     icinga.service_count_problems != icinga_previous.service_count_problems
 
     moreinfo_msg = ""
     if icinga.service_count_problems > 0
