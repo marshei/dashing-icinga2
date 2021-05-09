@@ -1,0 +1,47 @@
+// ----------------------------------------------------------------------------
+// Sass declarations
+// ----------------------------------------------------------------------------
+// Import global settings (color, size, etc.)
+
+@import "application.scss";
+
+$meter-color-ok:        rgba(68, 187, 119, 1);
+$meter-color-warning:   rgba(255, 170, 68, 1);
+$meter-color-critical:  rgba(255, 85, 102, 0.8);
+$meter-color-unknown:   rgba(170, 68, 255, 1);
+
+// ----------------------------------------------------------------------------
+// Widget-tacticalmeter styles
+// ----------------------------------------------------------------------------
+.widget-tacticalmeter {
+
+  $background-color-test: rgba(210, 230, 240, 0.3);
+
+  input.tactical-meter-ok {
+    background-color: $background-color-test;
+    color: $meter-color-ok;
+  }
+
+  input.tactical-meter-warning {
+    background-color: $background-color-test;
+    color: $meter-color-warning;
+  }
+
+  input.tactical-meter-critical {
+    background-color: $background-color-test;
+    color: $meter-color-critical;
+  }
+
+  input.tactical-meter-unknown {
+    background-color: $background-color-test;
+    color: $meter-color-unknown;
+  }
+
+  .title {
+    color: $title-color;
+  }
+
+  .more-info {
+    color: $moreinfo-color;
+  }
+}

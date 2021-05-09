@@ -72,20 +72,18 @@ SCHEDULER.every '15s', allow_overlapping: false, :first_in => 0 do |job|
   end
 
   if icinga.service_count_all != icinga_previous.service_count_all or
-     icinga.service_count_problems != icinga_previous.service_count_problems
-
-    moreinfo_msg = ""
-    if icinga.service_count_problems > 0
-      moreinfo_msg = "Warning: " + icinga.service_count_problems_warning.to_s + ", " +
-                     "Critical: " + icinga.service_count_problems_critical.to_s + ", " +
-                     "Unknown: " + icinga.service_count_problems_unknown.to_s
-    end
+     icinga.service_count_problems != icinga_previous.service_count_problems or
+     icinga.service_count_problems_warning != icinga_previous.service_count_problems_warning or
+     icinga.service_count_problems_critical != icinga_previous.service_count_problems_critical or
+     icinga.service_count_problems_unknown != icinga_previous.service_count_problems_unknown
 
     send_event('icinga-service-meter', {
-      value: icinga.service_count_all - icinga.service_count_problems,
+      value_ok: icinga.service_count_all - icinga.service_count_problems,
+      value_warning: icinga.service_count_problems_warning,
+      value_critical: icinga.service_count_problems_critical,
+      value_unknown: icinga.service_count_problems_unknown,
       min:   0,
-      max:   icinga.service_count_all,
-      moreinfo: moreinfo_msg })
+      max:   icinga.service_count_all})
   end
 
   send_event('icinga-stats', {
