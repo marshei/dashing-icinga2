@@ -2,18 +2,21 @@
 <div class="content">
     <div style="position:relative;left:0px;top:0px">
         <input class="tactical-meter-ok" data-angleOffset=-125 data-angleArc=250 data-width=200
-               data-height=200 data-readOnly=true data-bind-value="value_ok | shortenedNumber" data-bind-data-min="min"
-               data-bind-data-max="max">
+               data-height=200 data-readOnly=true data-bind-value="value_ok | shortenedNumber"
+               data-bind-data-min="min | default 0" data-bind-data-max="max | default 100">
     </div>
     <div style="position:relative;left:0px;top:-35px">
         <input class="tactical-meter-warning" data-angleOffset=-125 data-angleArc=250
                data-thickness=.3 data-width=75 data-height=75 data-readOnly=true
-               data-bind-value="value_warning" data-bind-data-min="min" data-bind-data-max="max">
+               data-bind-value="value_warning"
+               data-bind-data-min="min | default 0" data-bind-data-max="max | default 100">
         <input class="tactical-meter-critical" data-angleOffset=-125 data-angleArc=250
                data-thickness=.3 data-width=75 data-height=75 data-readOnly=true
-               data-bind-value="value_critical" data-bind-data-min="min" data-bind-data-max="max">
+               data-bind-value="value_critical"
+               data-bind-data-min="min | default 0" data-bind-data-max="max | default 100">
         <input class="tactical-meter-unknown" data-angleOffset=-125 data-angleArc=250
                data-thickness=.3 data-width=75 data-height=75 data-readOnly=true
-               data-bind-value="value_unknown" data-bind-data-min="min" data-bind-data-max="max">
+               data-bind-value="value_unknown"
+               data-bind-data-min="min | default 0" data-bind-data-max="max | default 100">
     </div>
 </div>

@@ -124,22 +124,16 @@ apt-get update
 apt-get -y install ruby bundler nodejs
 ```
 
-Proceed with the `bundler` gem installation.
+Proceed with the `bundler` and `smashing` gem installation.
 
 ```
-gem install bundler
+gem install bundler smashing
 ```
 
 In case the installation takes quite long and you do not need any documentation,
 add the `--no-document` flags.
 
 #### Proceed with bundling for all systems (CentOS, Ubuntu, Debian etc.)
-> **Note**
->
-> In case you want to use `smashing` instead of `dashing`,
-> set the environment variable like this:
->
-> `export DASHING_PROVIDER=smashing`
 
 Install the dependencies using Bundler. **Do not run this as root.**
 
@@ -155,13 +149,6 @@ bundle
 Proceed to the [configuration](#configuration) section.
 
 ### Unix and macOS
-
-> **Note**
->
-> In case you want to use `smashing` instead of `dashing`,
-> set the environment variable like this:
->
-> `export DASHING_PROVIDER=smashing`
 
 On macOS [OpenSSL was deprecated](https://github.com/eventmachine/eventmachine/issues/602),
 therefore you'll need to fix the eventmachine gem:

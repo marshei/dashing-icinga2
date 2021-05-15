@@ -56,7 +56,8 @@ SCHEDULER.every '15s', allow_overlapping: false, :first_in => 0 do |job|
 
   ### Events
   if icinga.host_count_all != icinga_previous.host_count_all or
-     icinga.host_count_problems != icinga_previous.host_count_problems
+     icinga.host_count_problems != icinga_previous.host_count_problems or
+     icinga.host_count_problems_down != icinga_previous.host_count_problems_down
 
     moreinfo_msg = ""
     if icinga.host_count_problems > 0
