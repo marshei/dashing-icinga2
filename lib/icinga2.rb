@@ -275,7 +275,7 @@ class Icinga2
   def checkCert()
     unless @nodeName
       begin
-        @nodeName = Socket.gethostbyname(Socket.gethostname).first
+        @nodeName = Addrinfo.tcp(Socket.gethostname, 80).getnameinfo.first
         @log.debug(sprintf('node name: %s', @nodeName))
       rescue SocketError => error
         @log.error(error)
